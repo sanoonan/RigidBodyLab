@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\glm-0.9.5.4\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glm-0.9.5.4\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\glm-0.9.5.4\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glm-0.9.5.4\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,13 +55,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\include;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\include;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\include;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\include;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\include;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\lib\Release\Win32;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\lib;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\lib;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\lib;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\lib\Release\Win32;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;assimp.lib;AntTweakBar.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,18 +74,31 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\include;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\include;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\include;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\include;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\include;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\lib\Release\Win32;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\lib;\\tholos.itserv.scss.tcd.ie\Pgrad\sanoonan\Documents\Visual Studio 2012\Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\lib;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\lib;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\lib\Release\Win32;C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;assimp.lib;AntTweakBar.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Files\Camera.cpp" />
+    <ClCompile Include="Files\main.cpp" />
+    <ClCompile Include="Files\Mesh.cpp" />
+    <ClCompile Include="Files\RigidBody.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Shaders\noTextureFragmentShader.txt" />
+    <Text Include="..\Shaders\noTextureVertexShader.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Files\Camera.h" />
+    <ClInclude Include="Files\Mesh.h" />
+    <ClInclude Include="Files\RigidBody.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
