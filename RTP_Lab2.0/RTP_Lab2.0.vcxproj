@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Files\Camera.cpp" />
+    <ClCompile Include="Files\Effector.cpp" />
     <ClCompile Include="Files\main.cpp" />
     <ClCompile Include="Files\Mesh.cpp" />
     <ClCompile Include="Files\RigidBody.cpp" />
@@ -97,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Files\Camera.h" />
+    <ClInclude Include="Files\Effector.h" />
     <ClInclude Include="Files\Mesh.h" />
     <ClInclude Include="Files\RigidBody.h" />
   </ItemGroup>

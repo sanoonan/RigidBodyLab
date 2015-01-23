@@ -24,8 +24,10 @@
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
+#include <glm/gtx/orthonormalize.hpp>
 
 #include "Mesh.h"
+#include "Effector.h"
 
 #include "AntTweakBar.h"
 
@@ -39,8 +41,26 @@ public:
 	glm::vec3 velocity;
 	glm::vec3 ang_velocity;
 
+
 	glm::mat4 translation_mat;
-	glm::mat4 rotation_mat;
+	glm::mat3 rotation_mat;
+
+	struct force_instance
+	{
+		glm::vec3 force, torque;
+		float time_left;
+
+		force_instance() {force = torque = glm::vec3(0.0f); time_left = 0;}
+	};
+
+	std::vector<force_instance> force_instances;
+
+
+
+	glm::mat3 inertial_tensor;
+	glm::vec3 centre_of_mass;
+
+	std::vector<glm::vec3> vertices;
 
 	float mass;
 
@@ -50,6 +70,7 @@ public:
 	RigidBody();
 	RigidBody(Mesh _mesh);
 
+	void load_mesh();
 	void draw(int m_loc);
 
 	void addTBar(TwBar *bar);
@@ -58,10 +79,21 @@ public:
 
 	void updateTranslation(float dt);
 	void updateRotation(float dt);
+	glm::vec3 getOrientationFromRotMat(glm::mat3 mat);
+
 	
 	
-	glm::mat4 makeAngVelMat();
+	glm::mat3 makeAngVelMat();
 
+	glm::mat3 calcInertialTensorBox();
+	glm::mat3 calcMomentInertia();
 
+	void affectedByForce(Effector effector);
+
+	glm::vec3 calcTotalForce();
+	glm::vec3 calcTotalTorque();
+	void cullInstances(float dt);
+
+	void removeInstance(int num);
 };
 

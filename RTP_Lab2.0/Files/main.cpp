@@ -22,6 +22,7 @@
 // Header includes
 
 #include "RigidBody.h"
+#include "Effector.h"
 #include "Camera.h"
 
 #include "AntTweakBar.h"
@@ -44,6 +45,7 @@ GLuint shaderProgramID;
 Mesh cube_mesh(MESH_CUBE);
 
 RigidBody cube(cube_mesh);
+Effector effector;
 
 #pragma region SHADER_FUNCTIONS
 
@@ -139,6 +141,11 @@ GLuint CompileShaders(const char* vertex_shader, const char* fragment_shader)
 
 #pragma region TWEAK BAR STUFF
 
+void TW_CALL poke(void *)
+{
+	cube.affectedByForce(effector);
+}
+
 void init_tweak()
 {
 	TwInit(TW_OPENGL, NULL);
@@ -148,12 +155,16 @@ void init_tweak()
 	bar = TwNewBar("Rigid Body");
 
 	cube.addTBar(bar);
+	effector.addTBar(bar);
+	TwAddButton(bar, "Poke", poke, NULL, "");
 }
 
 void draw_tweak()
 {
 	TwDraw();
 }
+
+
 
 #pragma endregion 
 
@@ -162,10 +173,10 @@ void init()
 {
 	shaderProgramID = CompileShaders(V_SHADER_NOTEXTURE, F_SHADER_NOTEXTURE);
 
-	cube.mesh.load_mesh();
+	cube.load_mesh();
 
 	init_tweak();
-	
+
 
 }
 
@@ -242,7 +253,7 @@ int main(int argc, char** argv)
 	glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
     glutInitWindowSize(width, height);
-    glutCreateWindow("Particle System");
+    glutCreateWindow("Rigid Body");
 
 	// Tell glut where the display function is
 	glutDisplayFunc(display);

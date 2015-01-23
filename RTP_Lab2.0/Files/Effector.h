@@ -25,22 +25,15 @@
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 
+#include "AntTweakBar.h"
 
-
-class Mesh
+class Effector
 {
 public:
-	const char* filename;
-	GLuint vao;
-	int point_count;
-	
-	Mesh();
-	Mesh(const char* _filename);
+	glm::vec3 position;
+	glm::vec3 force;
+	float time;
 
-	bool load_mesh(std::vector<glm::vec3> &v);
-	void assign_vao(const aiScene* scene);
-	void draw(glm::mat4 model_mat, int m_loc);
-
-	std::vector<glm::vec3> getVertices();
+	Effector();
+	void addTBar(TwBar *bar);
 };
-

@@ -16,8 +16,11 @@ Mesh :: Mesh(const char* _filename)
 	point_count = 0;
 }
 
-bool Mesh :: load_mesh ()
+bool Mesh :: load_mesh (std::vector<glm::vec3> &v)
 {
+	
+	v = getVertices();
+	
   const aiScene* scene = aiImportFile (filename, aiProcess_Triangulate); // TRIANGLES!
 
   
@@ -37,7 +40,7 @@ bool Mesh :: load_mesh ()
 
   for(int i=0; i<scene->mNumMeshes; i++)
   {
-	  assign_vao(scene);
+	assign_vao(scene);
   }
  
   aiReleaseImport (scene);
@@ -55,6 +58,7 @@ void Mesh :: assign_vao(const aiScene* scene)
 	 printf("   %i vertices in mesh[%i]\n", mesh->mNumVertices, 0);
 
 	  point_count = mesh->mNumVertices;
+
 
 	  glGenVertexArrays(1, &vao);
 	  glBindVertexArray(vao);
@@ -153,7 +157,7 @@ void Mesh :: assign_vao(const aiScene* scene)
 			  free (texcoords);
 		  }
 
-	
+
 }
 
 void Mesh :: draw(glm::mat4 model_mat, int m_loc)
@@ -161,4 +165,28 @@ void Mesh :: draw(glm::mat4 model_mat, int m_loc)
 	glUniformMatrix4fv(m_loc, 1, GL_FALSE, glm::value_ptr(model_mat));
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, point_count);
+}
+
+std::vector<glm::vec3> Mesh :: getVertices()
+{
+	const aiScene* scene = aiImportFile (filename, aiProcess_JoinIdenticalVertices);
+
+	const aiMesh* mesh = scene->mMeshes[0]; 
+
+	int vertex_count = mesh->mNumVertices;
+	std::vector<glm::vec3> v (vertex_count);
+
+	//get vertex positions
+	if (mesh->HasPositions ())
+	{
+
+		for (int i=0; i< vertex_count; i++)
+		{
+			const aiVector3D* vp = &(mesh->mVertices[i]);
+			v[i].x = (GLfloat)vp->x;
+			v[i].y = (GLfloat)vp->y;
+			v[i].z = (GLfloat)vp->z;
+		}
+	}
+	return v;
 }
