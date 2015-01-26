@@ -31,9 +31,27 @@ class Effector
 {
 public:
 	glm::vec3 position;
-	glm::vec3 force;
+	glm::vec3 force_dir;
+	float force_mag;
 	float time;
 
 	Effector();
 	void addTBar(TwBar *bar);
+
+	void setForceDir(glm::vec3 new_fd);
+	glm::vec3 getForceDir() const;
+
+
+
+	static void TW_CALL setForceDirCB(const void *value, void *clientData)
+	{
+		static_cast<Effector *>(clientData)->setForceDir(*static_cast<const glm::vec3 *>(value));
+	}
+
+	static void TW_CALL getForceDirCB(void *value, void *clientData)
+    {
+		
+		*static_cast<glm::vec3 *>(value) = static_cast<const Effector *>(clientData)->getForceDir();
+    }
+
 };

@@ -29,8 +29,8 @@
 
 using namespace std;
 
-int width = 800;
-int height = 600;
+int width = 1200;
+int height = 900;
 
 #define V_SHADER_NOTEXTURE "../Shaders/noTextureVertexShader.txt"
 #define F_SHADER_NOTEXTURE "../Shaders/noTextureFragmentShader.txt"
@@ -38,7 +38,8 @@ int height = 600;
 
 int oldTime = 0;
 
-Camera camera(glm::vec3(-2.0f, 2.0f, 10.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 10.0f));
+
 
 GLuint shaderProgramID;
 
@@ -46,6 +47,8 @@ Mesh cube_mesh(MESH_CUBE);
 
 RigidBody cube(cube_mesh);
 Effector effector;
+
+glm::mat4 proj_mat, view_mat;
 
 #pragma region SHADER_FUNCTIONS
 
@@ -157,6 +160,7 @@ void init_tweak()
 	cube.addTBar(bar);
 	effector.addTBar(bar);
 	TwAddButton(bar, "Poke", poke, NULL, "");
+	camera.addTBar(bar);
 }
 
 void draw_tweak()
@@ -177,6 +181,7 @@ void init()
 
 	init_tweak();
 
+	camera.move_speed = 0.1f;
 
 }
 
@@ -194,10 +199,11 @@ void display()
 	int view_mat_location = glGetUniformLocation (shaderProgramID, "view");
 	int proj_mat_location = glGetUniformLocation (shaderProgramID, "proj");
 
-	glm::mat4 persp_proj = glm::perspective(45.0f, (float)width/(float)height, 0.1f, 200.0f);
-	glUniformMatrix4fv (proj_mat_location, 1, GL_FALSE, glm::value_ptr(persp_proj));
+	proj_mat = glm::perspective(45.0f, (float)width/(float)height, 0.1f, 200.0f);
+	glUniformMatrix4fv (proj_mat_location, 1, GL_FALSE, glm::value_ptr(proj_mat));
 
-	glm::mat4 view_mat = camera.getRotationMat(glm::vec3(0.0f));
+	
+	view_mat = camera.getRotationMat();
 	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, glm::value_ptr(view_mat));
 
 	cube.draw(model_mat_location);
@@ -218,33 +224,209 @@ void updateScene()
 	double elapsed_seconds = (double)delta_time/1000;
 
 	cube.update(elapsed_seconds);
+	cube.transformVertices(proj_mat, view_mat);
 
 	glutPostRedisplay();
 }
 
-void specialpress(int key, int x, int y)
+
+void getMouseRayPoints(int x, int y, glm::vec3 &p1, glm::vec3 &p2, RigidBody object)
 {
-	switch(key)
+	// This function will find 2 points in world space that are on the line into the screen defined by screen-space( ie. window-space ) point (x,y)
+	double mvmatrix[16];
+	double projmatrix[16];
+	int viewport[4];
+	double dX, dY, dZ, dClickY; // glUnProject uses doubles, but I'm using floats for these 3D vectors
+
+	glm::mat4 mv_mat = view_mat;
+	
+	const float *pSource = (const float*) glm::value_ptr(mv_mat);
+	for(int i=0; i<16; i++)
+		mvmatrix[i] = pSource[i];
+
+	pSource = (const float*) glm::value_ptr(proj_mat);
+	for(int i=0; i<16; i++)
+		projmatrix[i] = pSource[i];
+
+	viewport[0] = 0;
+	viewport[1] = 0;
+	viewport[2] = width;
+	viewport[3] = height;
+	
+//	glGetIntegerv(GL_VIEWPORT, viewport);	
+//	glGetDoublev (GL_MODELVIEW_MATRIX, mvmatrix);
+//	glGetDoublev (GL_PROJECTION_MATRIX, projmatrix);
+	dClickY = double (height - y); // OpenGL renders with (0,0) on bottom, mouse reports with (0,0) on top
+	
+	gluUnProject ((double) x, dClickY, 0.0, mvmatrix, projmatrix, viewport, &dX, &dY, &dZ);
+	p1 = glm::vec3 ( (float) dX, (float) dY, (float) dZ );
+	gluUnProject ((double) x, dClickY, 1.0, mvmatrix, projmatrix, viewport, &dX, &dY, &dZ);
+	p2 = glm::vec3 ( (float) dX, (float) dY, (float) dZ );
+}
+
+
+bool checkRayTriangleIntersection(glm::vec3 TP1, glm::vec3 TP2, glm::vec3 TP3, glm::vec3 LP1, glm::vec3 LP2, glm::vec3 &HitPos)
+{
+	glm::vec3 Normal, IntersectPos;
+
+	// Find Triangle Normal
+	Normal = glm::cross( TP2 - TP1, TP3 - TP1 );
+	glm::normalize(Normal); // not really needed
+
+	// Find distance from LP1 and LP2 to the plane defined by the triangle
+	float Dist1 = glm::dot(LP1-TP1, Normal);;
+	float Dist2 = glm::dot(LP2-TP1, Normal);
+
+	float lol = Dist1 * Dist2;
+
+	if ( (Dist1 * Dist2) >= 0.0f) 
+		return false;	// line doesn't cross the triangle.
+	if ( Dist1 == Dist2) 
+		return false;	// line and plane are parallel
+
+	// Find point on the line that intersects with the plane
+	IntersectPos = LP1 + (LP2-LP1) * ( -Dist1/(Dist2-Dist1) );
+
+	// Find if the interesection point lies inside the triangle by testing it against all edges
+	glm::vec3 vTest;
+	
+	vTest = glm::cross( Normal, TP2-TP1 );
+	if ( glm::dot( vTest, IntersectPos-TP1) < 0.0f )
+		return false;
+	
+	vTest = glm::cross( Normal, TP3-TP2 );
+	if ( glm::dot( vTest, IntersectPos-TP2) < 0.0f )
+		return false;
+	
+	vTest = glm::cross( Normal, TP1-TP3 );
+	if ( glm::dot( vTest, IntersectPos-TP1) < 0.0f )
+		return false;
+
+	HitPos = IntersectPos;
+	return true;
+}
+
+
+void mousePress(int button, int state, int x, int y)
+{
+	if(!TwEventMouseButtonGLUT(button, state, x, y))
 	{
+		if((button == GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN))
+		{
+			cout << "click" << endl;
+
+			glm::vec3 p1, p2;
+			getMouseRayPoints(x, y, p1, p2, cube);
+			bool hit = false;
+			float min_hit_dist;
+			glm::vec3 min_hit_pos;
+
+
+			for(int i=0; i < cube.transformed_vertices.size(); i+=3)
+			{
+				glm::vec3 hit_position;
+				if(checkRayTriangleIntersection(cube.transformed_vertices[i], cube.transformed_vertices[i+1], cube.transformed_vertices[i+2], p1, p2, hit_position))
+				{
+					float hit_dist = glm::distance(camera.position, hit_position);
+
+					if(!hit)
+					{
+						hit = true;
+						cout << "hit" << endl;
+						min_hit_pos = hit_position;
+						min_hit_dist = hit_dist;
+					}
+					else
+					{
+						if(hit_dist < min_hit_dist)
+						{
+							min_hit_dist = hit_dist;
+							min_hit_pos = hit_position;
+						}
+					}
+				}
+			}
+
+			if(hit)
+			{
+				effector.force_dir = min_hit_pos - camera.position;
+				effector.position = min_hit_pos;
+				cube.affectedByForce(effector);
+			}
+
+	
+		
+		}
+	}
+}
+
+void specialPress(int key, int x, int y)
+{
+	if(!TwEventSpecialGLUT(key, x, y))
+	{
+		switch (key)
+		{
 		//left arrow
-		case 100 :	
+		case 100 :
+			camera.moveLeft();
 		break;
 
 		//up arrow
 		case 101 :	
+			camera.moveForwards();
 		break;
 	
 		//right arrow
 		case 102 :
+			camera.moveRight();
 		break;
 
 		//down arrow
 		case 103:
+			camera.moveBackwards();
 		break;
+
+	
+		}
 	}
 
-	glutPostRedisplay(); 
+glutPostRedisplay(); 
 }
+
+
+void keyPress(unsigned char key, int x, int y)
+{
+	if(!TwEventKeyboardGLUT(key, x, y))
+	{
+		switch (key)
+		{
+		//left
+		case 'a' :
+			camera.turnLeft();
+		break;
+
+		//up
+		case 'w' :	
+			camera.lookUp();
+		break;
+	
+		//right
+		case 'd' :
+			camera.turnRight();
+		break;
+
+		//down
+		case 's':
+			camera.lookDown();
+		break;
+
+	
+		}
+	}
+
+glutPostRedisplay(); 
+}
+	
 
 int main(int argc, char** argv)
 {
@@ -260,11 +442,11 @@ int main(int argc, char** argv)
 	glutIdleFunc(updateScene);
 
 
-	 glutMouseFunc((GLUTmousebuttonfun)TwEventMouseButtonGLUT);
+	 glutMouseFunc(mousePress);
 	 glutMotionFunc((GLUTmousemotionfun)TwEventMouseMotionGLUT);
 	 glutPassiveMotionFunc((GLUTmousemotionfun)TwEventMouseMotionGLUT); // same as MouseMotion
-	 glutKeyboardFunc((GLUTkeyboardfun)TwEventKeyboardGLUT);
-	 glutSpecialFunc((GLUTspecialfun)TwEventSpecialGLUT);
+	 glutKeyboardFunc(keyPress);
+	 glutSpecialFunc(specialPress);
  
 	  // send the ''glutGetModifers'' function pointer to AntTweakBar
 	 TwGLUTModifiersFunc(glutGetModifiers);

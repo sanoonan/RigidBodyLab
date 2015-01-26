@@ -1,9 +1,18 @@
-﻿Build started 23/01/2015 00:53:28.
+﻿Build started 26/01/2015 12:43:37.
      1>Project "C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\RTP_Lab2.0.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\include" /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\include" /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\include" /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Files\RigidBody.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\include" /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\include" /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\include" /I"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Files\RigidBody.cpp Files\main.cpp
          RigidBody.cpp
-     1>c:\vs projects\rtp_lab2.0\rtp_lab2.0\files\rigidbody.cpp(135): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\vs projects\rtp_lab2.0\rtp_lab2.0\files\rigidbody.cpp(29): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\vs projects\rtp_lab2.0\rtp_lab2.0\files\rigidbody.cpp(287): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\vs projects\rtp_lab2.0\rtp_lab2.0\files\rigidbody.cpp(431): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
+         Compiling...
+         main.cpp
+     1>c:\vs projects\rtp_lab2.0\rtp_lab2.0\files\main.cpp(226): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\vs projects\rtp_lab2.0\rtp_lab2.0\files\main.cpp(325): warning C4018: '<' : signed/unsigned mismatch
+         GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\VS Projects\RTP_Lab2.0\Debug\RTP_Lab2.0.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\AntTweakBar\AntTweakBar\lib" /LIBPATH:"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\freeglut\lib" /LIBPATH:"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\VS Projects\RTP_Lab2.0\RTP_Lab2.0\assimp\lib\Release" freeglut.lib glew32.lib assimp.lib AntTweakBar.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\VS Projects\RTP_Lab2.0\Debug\RTP_Lab2.0.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\VS Projects\RTP_Lab2.0\Debug\RTP_Lab2.0.lib" /MACHINE:X86 Debug\Camera.obj
          Debug\Effector.obj
@@ -15,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.54
+Time Elapsed 00:00:02.98

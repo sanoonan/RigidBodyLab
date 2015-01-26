@@ -25,6 +25,7 @@
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 #include <glm/gtx/orthonormalize.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include "Mesh.h"
 #include "Effector.h"
@@ -45,6 +46,8 @@ public:
 	glm::mat4 translation_mat;
 	glm::mat3 rotation_mat;
 
+	glm::mat4 model_mat;
+
 	struct force_instance
 	{
 		glm::vec3 force, torque;
@@ -54,6 +57,7 @@ public:
 	};
 
 	std::vector<force_instance> force_instances;
+	force_instance drag;
 
 
 
@@ -61,9 +65,12 @@ public:
 	glm::vec3 centre_of_mass;
 
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> transformed_vertices;
+
 
 	float mass;
 
+	float drag_coeff;
 
 	Mesh mesh;
 
@@ -79,21 +86,40 @@ public:
 
 	void updateTranslation(float dt);
 	void updateRotation(float dt);
+
+
+	void updateTranslationRK4(float dt);
+	void updateRotationRK4(float dt);
+
+
+
+	glm::vec3 calcDrag(glm::vec3 v);
+	void updateDrag();
 	glm::vec3 getOrientationFromRotMat(glm::mat3 mat);
 
 	
 	
-	glm::mat3 makeAngVelMat();
+	glm::mat3 makeAngVelMat(glm::vec3 av_vec);
 
 	glm::mat3 calcInertialTensorBox();
-	glm::mat3 calcMomentInertia();
+	glm::mat3 calcMomentInertia(glm::mat3 rot_mat);
 
 	void affectedByForce(Effector effector);
 
-	glm::vec3 calcTotalForce();
-	glm::vec3 calcTotalTorque();
-	void cullInstances(float dt);
+	glm::vec3 calcTotalForceWithDrag(std::vector<force_instance> fi);
+	glm::vec3 calcTotalTorqueWithDrag(std::vector<force_instance> fi);
+	glm::vec3 calcTotalForce(std::vector<force_instance> fi);
+	glm::vec3 calcTotalTorque(std::vector<force_instance> fi);
+	void cullInstances(std::vector<force_instance> &fi, float dt);
 
-	void removeInstance(int num);
+	void removeInstance(std::vector<force_instance> &fi, int num);
+
+	void addDrag(float drag_coeff);
+
+	void transformVertices(glm::mat4 proj, glm::mat4 view);
+
+	glm::vec3 updateCOM(std::vector<glm::vec3> v);
+
+
 };
 

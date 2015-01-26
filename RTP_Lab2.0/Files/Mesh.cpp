@@ -169,7 +169,7 @@ void Mesh :: draw(glm::mat4 model_mat, int m_loc)
 
 std::vector<glm::vec3> Mesh :: getVertices()
 {
-	const aiScene* scene = aiImportFile (filename, aiProcess_JoinIdenticalVertices);
+	const aiScene* scene = aiImportFile (filename, aiProcess_Triangulate);
 
 	const aiMesh* mesh = scene->mMeshes[0]; 
 

@@ -25,19 +25,32 @@
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 
-
+#include <AntTweakBar.h>
 
 
 class Camera
 {
 public:
 	
-	glm::vec3 position;
+	glm::vec3 position, focus;
+	float move_speed;
+
 
 	Camera();
 	Camera(glm::vec3 _position);
 
-	glm::mat4 getRotationMat(glm::vec3 focus);
+	glm::mat4 getRotationMat();
+
+	void moveForwards();
+	void moveBackwards();
+	void moveLeft();
+	void moveRight();
+	void turnLeft();
+	void turnRight();
+	void lookUp();
+	void lookDown();
+
+	void addTBar(TwBar *bar);
 
 };
 
