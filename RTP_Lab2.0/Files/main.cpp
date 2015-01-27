@@ -34,7 +34,7 @@ int height = 900;
 
 #define V_SHADER_NOTEXTURE "../Shaders/noTextureVertexShader.txt"
 #define F_SHADER_NOTEXTURE "../Shaders/noTextureFragmentShader.txt"
-#define MESH_CUBE "Meshes/cube.dae"
+#define MESH_CUBE "Meshes/suzanne.dae"
 
 int oldTime = 0;
 
@@ -183,6 +183,8 @@ void init()
 
 	camera.move_speed = 0.1f;
 
+	const GLubyte* version = glGetString(GL_VERSION);
+	cout << version;
 }
 
 void display()
@@ -224,7 +226,7 @@ void updateScene()
 	double elapsed_seconds = (double)delta_time/1000;
 
 	cube.update(elapsed_seconds);
-	cube.transformVertices(proj_mat, view_mat);
+
 
 	glutPostRedisplay();
 }

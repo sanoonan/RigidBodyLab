@@ -29,7 +29,7 @@ void RigidBody :: load_mesh()
 	for(int i=0; i<vertices.size(); i++)
 		transformed_vertices[i] = vertices[i];
 
-	centre_of_mass = updateCOM(vertices);
+	original_com = updateCOM(vertices);
 	inertial_tensor = calcInertialTensorBox();
 }
 
@@ -55,6 +55,8 @@ void RigidBody :: update(float dt)
 	updateTranslation(dt);
 	updateRotation(dt);
 	cullInstances(force_instances, dt);
+
+	transformVertices();
 }
 
 glm::vec3 RigidBody :: calcDrag(glm::vec3 v)
@@ -424,9 +426,10 @@ void RigidBody :: removeInstance(std::vector<force_instance> &fi, int num)
 	fi.resize(size-1);
 }
 
-void RigidBody :: transformVertices(glm::mat4 proj, glm::mat4 view)
+void RigidBody :: transformVertices()
 {
 	model_mat = translation_mat * glm::mat4(rotation_mat);
+	centre_of_mass = glm::vec3(model_mat * glm::vec4(original_com, 1.0f));
 
 	for(int i=0; i<vertices.size(); i++)
 		transformed_vertices[i] = glm::vec3(model_mat *  glm::vec4(vertices[i], 1.0));
@@ -435,6 +438,7 @@ void RigidBody :: transformVertices(glm::mat4 proj, glm::mat4 view)
 
 glm::vec3 RigidBody :: updateCOM(std::vector<glm::vec3> v)
 {
+	/*
 	float totx = 0;
 	float toty = 0;
 	float totz = 0;
@@ -453,5 +457,38 @@ glm::vec3 RigidBody :: updateCOM(std::vector<glm::vec3> v)
 	c = glm::vec3(totx, toty, totz);
 
 	return c;
+	*/
+	float width, height, depth;
+	float min_x, min_y, min_z, max_x, max_y, max_z;
+
+	min_x = max_x = v[0].x;
+	min_y = max_y = v[0].y;
+	min_z = max_z = v[0].z;
+
+	for(int i=1; i<v.size(); i++)
+	{
+		if(v[i].x < min_x)
+			min_x = v[i].x;
+		if(v[i].x > max_x)
+			max_x = v[i].x;
+
+		if(v[i].y < min_y)
+			min_y = v[i].y;
+		if(v[i].y > max_y)
+			max_y = v[i].y;
+
+		if(v[i].z < min_z)
+			min_z = v[i].z;
+		if(v[i].z > max_z)
+			max_z = v[i].z;
+	}
+
+	glm::vec3 min(min_x, min_y, min_z);
+	glm::vec3 max(max_x, max_y, max_z);
+
+	glm::vec3 mid = (min + max) * (0.5f);
+	
+	return mid;
+
 }
 

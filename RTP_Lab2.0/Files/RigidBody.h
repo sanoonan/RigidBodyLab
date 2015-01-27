@@ -62,6 +62,7 @@ public:
 
 
 	glm::mat3 inertial_tensor;
+	glm::vec3 original_com;
 	glm::vec3 centre_of_mass;
 
 	std::vector<glm::vec3> vertices;
@@ -116,7 +117,7 @@ public:
 
 	void addDrag(float drag_coeff);
 
-	void transformVertices(glm::mat4 proj, glm::mat4 view);
+	void transformVertices();
 
 	glm::vec3 updateCOM(std::vector<glm::vec3> v);
 
