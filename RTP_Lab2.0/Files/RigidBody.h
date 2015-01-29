@@ -121,6 +121,6 @@ public:
 
 	glm::vec3 updateCOM(std::vector<glm::vec3> v);
 
-
+	void reset();
 };
 

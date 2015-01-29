@@ -40,6 +40,7 @@ void RigidBody :: draw(int m_loc)
 	mesh.draw(model_mat, m_loc);
 }
 
+
 void RigidBody :: addTBar(TwBar *bar)
 {
 	TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &position, "");
@@ -490,5 +491,18 @@ glm::vec3 RigidBody :: updateCOM(std::vector<glm::vec3> v)
 	
 	return mid;
 
+}
+
+
+void RigidBody :: reset()
+{
+	position = orientation = velocity = ang_velocity = centre_of_mass = glm::vec3(0.0f);
+	translation_mat  = glm::mat4();
+	inertial_tensor = rotation_mat = glm::mat3();
+	mass = 1;
+	drag_coeff = 1;
+
+	while(force_instances.size() > 0)
+		removeInstance(force_instances, 0);
 }
 

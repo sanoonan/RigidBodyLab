@@ -149,6 +149,11 @@ void TW_CALL poke(void *)
 	cube.affectedByForce(effector);
 }
 
+void TW_CALL reset(void *)
+{
+	cube.reset();
+}
+
 void init_tweak()
 {
 	TwInit(TW_OPENGL, NULL);
@@ -160,7 +165,9 @@ void init_tweak()
 	cube.addTBar(bar);
 	effector.addTBar(bar);
 	TwAddButton(bar, "Poke", poke, NULL, "");
+	TwAddButton(bar, "Reset", reset, NULL, "");
 	camera.addTBar(bar);
+
 }
 
 void draw_tweak()
@@ -183,8 +190,7 @@ void init()
 
 	camera.move_speed = 0.1f;
 
-	const GLubyte* version = glGetString(GL_VERSION);
-	cout << version;
+
 }
 
 void display()
